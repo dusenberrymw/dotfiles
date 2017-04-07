@@ -4,10 +4,10 @@ set nocompatible                "turn off compatibility with vi
 " ==== START VUNDLE ====
 " Brief help
 " :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just 
+" :PluginInstall    - installs plugins; append `!` to update or just
 "                       :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to 
+" :PluginClean      - confirms removal of unused plugins; append `!` to
 "                       auto-approve removal
 "
 " see :h vundle for more details or wiki for FAQ
@@ -16,7 +16,7 @@ set nocompatible                "turn off compatibility with vi
 filetype off                    "required while loading Vundle + plugins
 set rtp+=~/.vim/bundle/Vundle.vim "set runtime path to include Vundle
 call vundle#begin()             "initialize Vundle
-Plugin 'VundleVim/Vundle.vim'      "let Vundle manage Vundle (required)
+Plugin 'VundleVim/Vundle.vim'  "let Vundle manage Vundle (required)
 
 " ==== Install plugins w/ Vundle ====
 "Plugin 'kovisoft/slimv'
@@ -33,11 +33,14 @@ Plugin 'VundleVim/Vundle.vim'      "let Vundle manage Vundle (required)
 " ,> -> move paren to right
 " ctrl-w w -> switch buffer window
 "Plugin 'amdt/vim-niji'          " rainbow parentheses for lisp
-Plugin 'derekwyatt/vim-scala' " Scala support
-Plugin 'altercation/vim-colors-solarized' " Solarized color theme
+"Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'derekwyatt/vim-scala'  " Scala support
+Plugin 'nakul02/vim-dml'  " DML support
+Plugin 'altercation/vim-colors-solarized'  " Solarized
 
 " ==== finish Vundle installs ====
 call vundle#end()               "end Vundle plugin installation
+filetype plugin indent on
 " ==== END VUNDLE ====
 
 " ==== General ====
@@ -65,7 +68,7 @@ set expandtab                   "expand tabs to spaces
 
 " ==== Lines ====
 set nowrap                      "don't soft-wrap to window width
-set colorcolumn=79              "highlight column 79
+set colorcolumn=100             "highlight column 100
 
 " ==== Scrolling ====
 set scrolloff=3                 "keep three lines between cursor and window edge
@@ -76,14 +79,14 @@ set smartcase                   "unless search term has case
 set incsearch                   "search while typing
 set hlsearch                    "highlight search results
 
-" ==== Solarized colorscheme
-syntax enable
-set background=dark
-colorscheme solarized
-
 " ==== Filetypes ====
 filetype plugin indent on       "automatic indentation based on language
 syntax on                       "turn on syntax highlighting
+
+" ==== Theme ====
+syntax enable
+set background=dark
+colorscheme solarized
 
 " ==== Filetype specific ====
 autocmd BufRead,BufNewFile *.py
@@ -92,7 +95,7 @@ autocmd BufRead,BufNewFile *.py
     "these files only use 2 space indentation
 
 autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf
-    \ setlocal wrap linebreak breakindent showbreak=\ \  |
+    \ setlocal spell wrap linebreak breakindent showbreak=\ \  |
     \ setlocal colorcolumn= |
     \ :syn match markdownIgnore "\$.*_{.*\$" |
     \ nnoremap j gj|
@@ -109,18 +112,27 @@ autocmd BufRead,BufNewFile *.scm.md
     \ set filetype=markdown
     "special setting for markdown with scheme code within
     "setting ft to scheme and then back to markdown
-    " will trigger load of slimv, but retain 
+    " will trigger load of slimv, but retain
     " markdown syntax highlighting
 
 autocmd BufReadPost *
     \ if line("'\"") > 1 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
-    " When editing a file, always jump to the last known cursor position. 
-    " Don't do it when the position is invalid or when inside an event 
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it when the position is invalid or when inside an event
     "  handler (happens when dropping a file on gvim).
-    " Also don't do it when the mark is in the first line, that is the 
+    " Also don't do it when the mark is in the first line, that is the
     "  default position when opening a file.
+
+" Remove trailing whitespace on save
+fun! TrimWhitespace()
+    let l:save = winsaveview()
+    %s/\s\+$//e
+    call winrestview(l:save)
+endfun
+
+autocmd BufWritePre * :call TrimWhitespace()
 
 " ==== CUSTOM MAPPINGS ====
 " NOTE: MAKE SURE THERE ARE NO SPACES LEFT AFTER EACH COMMAND, OR THEY WILL
@@ -143,6 +155,13 @@ map <up> <nop>
 map <down> <nop>
 map <left> <nop>
 map <right> <nop>
+
+" Sane window splits
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
 " ==== END CUSTOM MAPPINGS ====
 
 " ==== Setup SLIMV for Lisp ====
