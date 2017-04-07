@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Create soft links in ~/ to all files in this folder other than
-# README.md and this script.
+# .git, README.md, and this script.
 shopt -s dotglob extglob
 DIR="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT=`basename "$0"`
-FILES=!(README.md|$SCRIPT)
+FILES=!(.git|README.md|$SCRIPT)
 #echo $FILES
 for f in $FILES; do
   pushd ~ > /dev/null  # quiet!
