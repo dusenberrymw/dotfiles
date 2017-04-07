@@ -91,3 +91,10 @@ div.output_stderr pre {color: #eee8d5;}
 
 .cm-s-ipython .CodeMirror-matchingbracket { text-decoration: underline; color: #eee8d5 !important;}
 
+/* Vim binding styles */
+/*  - Jupyter cell is in normal mode when code mirror */
+.edit_mode .cell.selected .CodeMirror-focused.cm-fat-cursor {background-color: #002b36 !important;}
+
+/*  - Jupyter cell is in insert mode when code mirror */
+.edit_mode .cell.selected .CodeMirror-focused:not(.cm-fat-cursor) {background-color: #002b36 !important;}
+

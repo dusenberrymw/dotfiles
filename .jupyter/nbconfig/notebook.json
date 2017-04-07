@@ -3,5 +3,8 @@
     "cm_config": {
       "indentUnit": 2
     }
+  },
+  "load_extensions": {
+    "vim_binding/vim_binding": true
   }
 }
