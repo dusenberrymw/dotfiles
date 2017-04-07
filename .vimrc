@@ -31,6 +31,7 @@ Plugin 'VundleVim/Vundle.vim'      " let Vundle manage Vundle (required)
 " ctrl-w w -> switch buffer window
 Plugin 'derekwyatt/vim-scala'              " Scala support
 Plugin 'nakul02/vim-dml'                   " DML support
+Plugin 'jpalardy/vim-slime'                " Send text to any REPL in TMUX
 Plugin 'altercation/vim-colors-solarized'  " Solarized
 
 " ==== finish Vundle installs ====
@@ -158,4 +159,18 @@ nnoremap <c-l> <c-w>l
 
 " ==== Setup SLIMV for Lisp ====
 "let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\"" -e "do script \"sbcl --load ~/.vim/slime/start-swank.lisp\"" -e "set miniaturized of front window to true" -e "end tell"'
+
+" ==== Vim-Slime settings ====
+" Leave tmux socket name set to `default`.
+" Target pane notes:
+"   ":"     means current window, current pane (a reasonable default)
+"   ":i"    means the ith window, current pane
+"   ":i.j"  means the ith window, jth pane
+"   "h:i.j" means the tmux session where h is the session identifier
+"           (either session name or number), the ith window and the jth pane
+"   "%i"    means i refers the pane's unique id
+" C-c C-c to send either the explicitly selected text, or the current
+" paragraph (i.e. results of `vip`).
+let g:slime_target = "tmux"     " enable TMUX by default
+let g:slime_python_ipython = 1  " use special pasting for iPython
 
