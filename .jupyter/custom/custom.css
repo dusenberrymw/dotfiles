@@ -30,7 +30,7 @@ a {color: #268bd2;}
 
 /* comment out this line to bring the toolbar back */
 /*div#maintoolbar, div#header {display: none !important;}*/
-div#maintoolbar, div#header-container {display: none !important;}
+div#maintoolbar, div#header-container, div.header-bar {display: none !important;}
 
 div#notebook {border-top: none;}
 
@@ -90,3 +90,4 @@ div.output_stderr pre {color: #eee8d5;}
 .cm-s-ipython span.cm-link {color: #6c71c4;}
 
 .cm-s-ipython .CodeMirror-matchingbracket { text-decoration: underline; color: #eee8d5 !important;}
+
