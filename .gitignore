@@ -1,7 +1,9 @@
 .gitconfig
 .jupyter/migrated
+.vim/.netrwhist
 .vim/bundle/*
 .vim/bundle/!.keep
-.vim/undo/%*
-.vim/.netrwhist
 .vim/spell/en.utf-8.add.spl
+.vim/undo/%*
+.vim/swap/%*
+
