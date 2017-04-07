@@ -1,0 +1,68 @@
+# ignore all files ending with ~
+*~ 
+
+## OSX
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+# Icon must ends with two \r.
+Icon
+# Thumbnails
+._*
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+## Vim
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+.vim/undo/%*
+
+## Python
+.ipynb_checkpoints
+*.pyc
+
+## Eclipse
+*.pydevproject
+.project
+.metadata
+.gradle
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+# External tool builders
+.externalToolBuilders/
+# Locally stored "Eclipse launch configurations"
+*.launch
+# CDT-specific
+.cproject
+# PDT-specific
+.buildpath
+# sbteclipse plugin 
+.target
+# TeXlipse plugin
+.texlipse
+
+## LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.spl
+*.fdb_latexmk
+*.fls
+
+## Octave
+octave-workspace
+
