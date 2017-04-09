@@ -1,12 +1,13 @@
-// Configure CodeMirror
+// Configure Vim bindings with CodeMirror API
 require([
-  'nbextensions/vim_binding/vim_binding',   // depends your installation
+  'nbextensions/vim_binding/vim_binding',
 ], function() {
-  // Map jj to <Esc>
-  CodeMirror.Vim.map("jj", "<Esc>", "insert");
-  // Map ':' to ';' for convenience
+  // Map `jj` to `Escape, l` in Insert mode, where the `l` prevents the
+  // cursor from moving backwards.
+  CodeMirror.Vim.map("jj", "<Esc>l", "insert");
+  // Map `;` to `:` for convenience.
   CodeMirror.Vim.map(";", ":", "normal");
-  // Swap j/k and gj/gk (Note the <Plug> mappings)
+  // Map j/k to gj/gk for multi-line navigation.
   CodeMirror.Vim.map("j", "<Plug>(vim-binding-gj)", "normal");
   CodeMirror.Vim.map("k", "<Plug>(vim-binding-gk)", "normal");
 });
