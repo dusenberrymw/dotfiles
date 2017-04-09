@@ -86,8 +86,8 @@ colorscheme solarized           " enable the dark solarized theme
 
 " ==== Filetype specific ====
 autocmd BufRead,BufNewFile *.py
-  \ set tabstop=2 |
-  \ set shiftwidth=2
+  \ setlocal tabstop=2 |
+  \ setlocal shiftwidth=2
   " These files only use 2 space indentation.
 
 autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
@@ -98,14 +98,13 @@ autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
   \ nnoremap k gk|
   \ nnoremap $ g$|
   \ nnoremap ^ g^
-  " Wrap lines, maintaining indentation level of original line.
 
 autocmd BufRead,BufNewFile *.scm.md
   \ setlocal spell spelllang=en_us |
-  \ set tabstop=2 |
-  \ set shiftwidth=2 |
-  \ set filetype=scheme |
-  \ set filetype=markdown
+  \ setlocal tabstop=2 |
+  \ setlocal shiftwidth=2 |
+  \ setlocal filetype=scheme |
+  \ setlocal filetype=markdown
   " Special setting for markdown with scheme code within setting ft to
   " scheme and then back to markdown.
   " Will trigger load of slimv, but retain markdown syntax highlighting.
@@ -132,10 +131,11 @@ autocmd BufWritePre * :call TrimWhitespace()
 " ==== Custom mappings ====
 " Note: Make sure there are no spaces left after each command, or they
 "       will become part of the command.
-" Map `jj` to `Escape` in Insert mode.
+" Map `jj` to `Escape, l` in Insert mode, where the `l` prevents the cursor
+" from moving backwards.
 inoremap jj <Esc>l
 
-" Map leader `;` to `:` for convenience.
+" Map `;` to `:` for convenience.
 nnoremap ; :
 
 " Make scrolling faster.
@@ -152,10 +152,10 @@ map <left> <nop>
 map <right> <nop>
 
 " Sane window splits.
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
+"nnoremap <c-j> <c-w>j
+"nnoremap <c-k> <c-w>k
+"nnoremap <c-h> <c-w>h
+"nnoremap <c-l> <c-w>l
 
 " ==== Setup SLIMV for Lisp ====
 "let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\"" -e "do script \"sbcl --load ~/.vim/slime/start-swank.lisp\"" -e "set miniaturized of front window to true" -e "end tell"'
