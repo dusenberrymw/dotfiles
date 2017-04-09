@@ -1,3 +1,5 @@
+shopt -s globstar
+
 #export CUDA_ROOT=/usr/local/cuda
 ##export CUDA_ROOT=/Developer/NVIDIA/CUDA-7.5
 ##export PATH=$CUDA_ROOT/bin:/usr/local/bin:/usr/local/sbin:~/Dropbox/Code/caffe/build/tools:~/Dropbox/Code/Scripts:~/.cabal/bin:/usr/texbin:$PATH
