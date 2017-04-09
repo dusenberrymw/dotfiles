@@ -16,8 +16,13 @@ call vundle#begin()                " initialize Vundle
 Plugin 'VundleVim/Vundle.vim'      " let Vundle manage Vundle (required)
 
 " ==== Install plugins w/ Vundle ====
-"Plugin 'kovisoft/slimv'
-"Plugin 'dusenberrymw/slimv'  " fixed bug for MIT-Scheme swank server
+Plugin 'altercation/vim-colors-solarized'  " Solarized colorscheme
+Plugin 'jpalardy/vim-slime'                " Send text to any REPL in TMUX
+Plugin 'ctrlpvim/ctrlp.vim'                " CtrlP fuzzy finder
+Plugin 'nakul02/vim-dml'                   " DML support
+Plugin 'derekwyatt/vim-scala'              " Scala support
+"Plugin 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
+"Plugin 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
 " Slimv notes:
 " ,d -> run function
 " ,e -> run s-expression
@@ -29,14 +34,10 @@ Plugin 'VundleVim/Vundle.vim'      " let Vundle manage Vundle (required)
 " ,< -> move paren to left
 " ,> -> move paren to right
 " ctrl-w w -> switch buffer window
-Plugin 'derekwyatt/vim-scala'              " Scala support
-Plugin 'nakul02/vim-dml'                   " DML support
-Plugin 'jpalardy/vim-slime'                " Send text to any REPL in TMUX
-Plugin 'altercation/vim-colors-solarized'  " Solarized
 
-" ==== finish Vundle installs ====
-call vundle#end()  "end Vundle plugin installation
-filetype plugin indent on
+" ==== Finish Vundle installs ====
+call vundle#end()          " end Vundle plugin installation
+filetype plugin indent on  " required after loading Vundle + plugins
 " ==== END VUNDLE ====
 
 " ==== General ====
@@ -91,7 +92,11 @@ autocmd BufRead,BufNewFile *.py
   " These files only use 2 space indentation.
 
 autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
-  \ setlocal spell wrap linebreak breakindent showbreak=\ \  |
+  \ setlocal spell |
+  \ setlocal wrap |
+  \ setlocal linebreak |
+  \ setlocal breakindent |
+  \ setlocal showbreak=\ \  |
   \ setlocal colorcolumn= |
   \ :syn match markdownIgnore "\$.*_{.*\$" |
   \ nnoremap j gj|
@@ -100,7 +105,7 @@ autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
   \ nnoremap ^ g^
 
 autocmd BufRead,BufNewFile *.scm.md
-  \ setlocal spell spelllang=en_us |
+  \ setlocal spell |
   \ setlocal tabstop=2 |
   \ setlocal shiftwidth=2 |
   \ setlocal filetype=scheme |
@@ -125,7 +130,6 @@ fun! TrimWhitespace()
   %s/\s\+$//e
   call winrestview(l:save)
 endfun
-
 autocmd BufWritePre * :call TrimWhitespace()
 
 " ==== Custom mappings ====
