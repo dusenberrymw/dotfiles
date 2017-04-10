@@ -75,6 +75,7 @@ set ignorecase                  " ignore case in file
 set smartcase                   " unless search term has case
 set incsearch                   " search while typing
 set hlsearch                    " highlight search results
+set shell+=\ -O\ globstar       " use `shopt -s globstar` for `:grep` searches
 
 " ==== Filetypes ====
 filetype plugin indent on       " automatic indentation based on language
