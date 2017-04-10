@@ -46,6 +46,7 @@ set title                       " show file name in title bar
 set ruler                       " show current cursor position at bottom right
 set visualbell                  " no sounds
 set backspace=indent,eol,start  " fix backspace issues
+set clipboard=unnamed           " use system clipboard for yank/paste
 
 " ==== Backup, swap, and undo files ====
 set nobackup                    " turn off backup files
