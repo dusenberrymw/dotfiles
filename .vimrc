@@ -187,9 +187,6 @@ let g:slime_python_ipython = 1  " use special pasting for iPython
 " ==== Neovim settings ====
 if has('nvim')
   " ==== Custom mappings ====
-  " Map `jj` to exit sequence in Terminal mode.
-  tnoremap jj <C-\><C-n>
-
   " Sane splits in Terminal mode.
   tnoremap <c-h> <C-\><C-n><C-w>h
   tnoremap <c-j> <C-\><C-n><C-w>j
