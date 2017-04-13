@@ -76,7 +76,11 @@ set ignorecase                  " ignore case in file
 set smartcase                   " unless search term has case
 set incsearch                   " search while typing
 set hlsearch                    " highlight search results
-set shell+=\ -O\ globstar       " use `shopt -s globstar` for `:grep` searches
+"set shell+=\ -O\ globstar       " use `shopt -s globstar` for `:grep` searches
+
+" ==== Windows/Panes ====
+set splitbelow                  " open splits below current buffer
+set splitright                  " open vertical splits to the right of the current buffer
 
 " ==== Filetypes ====
 filetype plugin indent on       " automatic indentation based on language
@@ -157,11 +161,11 @@ map <down> <nop>
 map <left> <nop>
 map <right> <nop>
 
-" Sane window splits.
-"nnoremap <c-j> <c-w>j
-"nnoremap <c-k> <c-w>k
-"nnoremap <c-h> <c-w>h
-"nnoremap <c-l> <c-w>l
+" Sane splits.
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
 
 " ==== Setup SLIMV for Lisp ====
 "let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\"" -e "do script \"sbcl --load ~/.vim/slime/start-swank.lisp\"" -e "set miniaturized of front window to true" -e "end tell"'
@@ -179,4 +183,21 @@ map <right> <nop>
 " paragraph (i.e. results of `vip`).
 let g:slime_target = "tmux"     " enable TMUX by default
 let g:slime_python_ipython = 1  " use special pasting for iPython
+
+" ==== Neovim settings ====
+if has('nvim')
+  " ==== Custom mappings ====
+  " Map `jj` to exit sequence in Terminal mode.
+  tnoremap jj <C-\><C-n>
+
+  " Sane splits in Terminal mode.
+  tnoremap <c-h> <C-\><C-n><C-w>h
+  tnoremap <c-j> <C-\><C-n><C-w>j
+  tnoremap <c-k> <C-\><C-n><C-w>k
+  tnoremap <c-l> <C-\><C-n><C-w>l
+
+  " ==== Vim-Slime settings ====
+  let g:slime_target = "neovim"  " enable Neovim terminal by default for slime
+  autocmd TermOpen * setlocal statusline=job_id:\ %{b:terminal_job_id}  " display job id for slime
+endif
 
