@@ -7,7 +7,7 @@ FILES=!(.|..|.git|.gitignore|README.md|$SCRIPT)
 #echo $FILES
 for f in $FILES; do
   pushd ~ > /dev/null  # quiet!
-  ln -sF $DIR/$f
+  ln -sfF $DIR/$f
   echo "Added ~/$f -> $DIR/$f"
   popd > /dev/null  # quiet!
 done
