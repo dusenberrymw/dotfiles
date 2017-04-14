@@ -196,5 +196,6 @@ if has('nvim')
   " ==== Vim-Slime settings ====
   let g:slime_target = "neovim"  " enable Neovim terminal by default for slime
   autocmd TermOpen * setlocal statusline=job_id:\ %{b:terminal_job_id}  " display job id for slime
+  autocmd TermOpen * setlocal bufhidden=hide  " prevent terminals from being deleted when switching
 endif
 
