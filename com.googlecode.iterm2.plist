@@ -261,28 +261,28 @@
 	<real>1</real>
 	<key>GlobalKeyMap</key>
 	<dict>
-		<key>0x68-0x40000</key>
+		<key>0x68-0x100000</key>
 		<dict>
 			<key>Action</key>
 			<integer>18</integer>
 			<key>Text</key>
 			<string></string>
 		</dict>
-		<key>0x6a-0x40000</key>
+		<key>0x6a-0x100000</key>
 		<dict>
 			<key>Action</key>
 			<integer>21</integer>
 			<key>Text</key>
 			<string></string>
 		</dict>
-		<key>0x6b-0x40000</key>
+		<key>0x6b-0x100000</key>
 		<dict>
 			<key>Action</key>
 			<integer>20</integer>
 			<key>Text</key>
 			<string></string>
 		</dict>
-		<key>0x6c-0x40000</key>
+		<key>0x6c-0x100000</key>
 		<dict>
 			<key>Action</key>
 			<integer>19</integer>
@@ -462,13 +462,13 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>168 388 606 456 0 0 1440 877 </string>
 	<key>NSWindow Frame SUStatusFrame</key>
-	<string>520 572 400 129 0 0 1440 877 </string>
+	<string>520 561 400 129 0 0 1440 877 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>410 382 620 392 0 0 1440 900 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>269 157 796 473 0 0 1440 877 </string>
+	<string>181 201 796 473 0 0 1440 900 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 17 1438 860 0 0 1440 877 </string>
+	<string>720 34 717 843 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>2400 10 955 1047 1440 0 1920 1057 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
@@ -1287,7 +1287,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-04-07T03:43:53Z</date>
+	<date>2017-04-21T03:13:02Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
