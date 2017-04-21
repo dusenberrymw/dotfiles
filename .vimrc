@@ -47,6 +47,7 @@ set ruler                       " show current cursor position at bottom right
 set visualbell                  " no sounds
 set backspace=indent,eol,start  " fix backspace issues
 set clipboard=unnamed           " use system clipboard for yank/paste
+set number relativenumber       " show number of current line & relative numbers of all other lines
 
 " ==== Backup, swap, and undo files ====
 set nobackup                    " turn off backup files
