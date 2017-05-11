@@ -48,6 +48,7 @@ set visualbell                  " no sounds
 set backspace=indent,eol,start  " fix backspace issues
 set clipboard=unnamed           " use system clipboard for yank/paste
 set number relativenumber       " show number of current line & relative numbers of all other lines
+set spell                       " enable spell checking
 
 " ==== Backup, swap, and undo files ====
 set nobackup                    " turn off backup files
@@ -99,7 +100,6 @@ autocmd BufRead,BufNewFile *.py
   " These files only use 2 space indentation.
 
 autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
-  \ setlocal spell |
   \ setlocal wrap |
   \ setlocal linebreak |
   \ setlocal breakindent |
@@ -112,7 +112,6 @@ autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
   \ nnoremap ^ g^
 
 autocmd BufRead,BufNewFile *.scm.md
-  \ setlocal spell |
   \ setlocal tabstop=2 |
   \ setlocal shiftwidth=2 |
   \ setlocal filetype=scheme |
