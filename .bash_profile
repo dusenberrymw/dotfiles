@@ -18,3 +18,7 @@ clean-python () {
   find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
 }
 
+clean-ds_store () {
+  find . | grep -E "(\.DS_Store)" | xargs rm -rf
+}
+
