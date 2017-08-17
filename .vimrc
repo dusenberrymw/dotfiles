@@ -21,6 +21,8 @@ Plugin 'jpalardy/vim-slime'                " Send text to any REPL in TMUX
 Plugin 'ctrlpvim/ctrlp.vim'                " CtrlP fuzzy finder
 Plugin 'nakul02/vim-dml'                   " DML support
 Plugin 'derekwyatt/vim-scala'              " Scala support
+Plugin 'Valloric/YouCompleteMe'            " Autocomplete, jump to declaration, & docs
+" NOTE: need to run `install.py --clang-completer` in " `~/.vim/bundle/YouCompleteMe` directory
 "Plugin 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
 "Plugin 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
 " Slimv notes:
@@ -183,6 +185,12 @@ nnoremap <c-l> <c-w>l
 " paragraph (i.e. results of `vip`).
 let g:slime_target = "tmux"     " enable TMUX by default
 let g:slime_python_ipython = 1  " use special pasting for iPython
+
+" ==== YouCompleteMe settings ====
+let g:ycm_python_binary_path = 'python3'  " use Python 3
+" Show docs for current function
+" NOTE: Use `:pc[lose]` to close the "preview" window
+nnoremap <leader>d :YcmCompleter GetDoc<CR>
 
 " ==== Neovim settings ====
 if has('nvim')
