@@ -191,6 +191,7 @@ let g:ycm_python_binary_path = 'python3'  " use Python 3
 " Show docs for current function
 " NOTE: Use `:pc[lose]` to close the "preview" window
 nnoremap <leader>d :YcmCompleter GetDoc<CR>
+nnoremap <leader>g :YcmCompleter GoTo<CR>
 
 " ==== Neovim settings ====
 if has('nvim')
