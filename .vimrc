@@ -169,6 +169,9 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
+" Map spacebar to leader, which is `\` by default.
+map <Space> <Leader>
+
 " ==== Setup SLIMV for Lisp ====
 "let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\"" -e "do script \"sbcl --load ~/.vim/slime/start-swank.lisp\"" -e "set miniaturized of front window to true" -e "end tell"'
 
