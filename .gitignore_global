@@ -67,3 +67,6 @@ __pycache__
 # Octave
 octave-workspace
 
+# vim YouCompleteMe cache
+.cache
+
