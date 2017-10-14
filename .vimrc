@@ -108,8 +108,8 @@ autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
   \ setlocal showbreak=\ \  |
   \ setlocal colorcolumn= |
   \ :syn match markdownIgnore "\$.*_{.*\$" |
-  \ nnoremap j gj|
-  \ nnoremap k gk|
+  \ nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')|
+  \ nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')|
   \ nnoremap $ g$|
   \ nnoremap ^ g^
 
@@ -151,8 +151,8 @@ inoremap jj <Esc>l
 nnoremap ; :
 
 " Make scrolling faster.
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
+"nnoremap <C-e> 3<C-e>
+"nnoremap <C-y> 3<C-y>
 
 " Map Enter to writing and running the makefile.
 "noremap <CR> :w <bar> :make! <CR>
