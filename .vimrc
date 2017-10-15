@@ -1,30 +1,23 @@
 " ==== VIM, not vi ====
 set nocompatible  " turn off compatibility with vi
 
-" ==== START VUNDLE ====
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-" See :h vundle for more details or wiki for FAQ.
-
-" ==== Setup Vundle ====
-filetype off                       " required while loading Vundle + plugins
-set rtp+=~/.vim/bundle/Vundle.vim  " set runtime path to include Vundle
-call vundle#begin()                " initialize Vundle
-Plugin 'VundleVim/Vundle.vim'      " let Vundle manage Vundle (required)
-
-" ==== Install plugins w/ Vundle ====
-Plugin 'altercation/vim-colors-solarized'  " Solarized colorscheme
-Plugin 'jpalardy/vim-slime'                " Send text to any REPL in TMUX
-Plugin 'ctrlpvim/ctrlp.vim'                " CtrlP fuzzy finder
-Plugin 'nakul02/vim-dml'                   " DML support
-Plugin 'derekwyatt/vim-scala'              " Scala support
-Plugin 'Valloric/YouCompleteMe'            " Autocomplete, jump to declaration, & docs
-" NOTE: need to run `install.py --clang-completer` in " `~/.vim/bundle/YouCompleteMe` directory
-"Plugin 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
-"Plugin 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
+"" ==== Install plugins w/ vim-plug ====
+if empty(glob('~/.vim/autoload/plug.vim'))
+  " install Plug if necessary
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+call plug#begin('~/.vim/plugged')
+Plug 'altercation/vim-colors-solarized'  " Solarized colorscheme
+Plug 'jpalardy/vim-slime'                " Send text to any REPL in TMUX
+Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --clang-completer'}
+                                         " Autocomplete, jump to declaration, & docs
+Plug 'ctrlpvim/ctrlp.vim'                " CtrlP fuzzy finder
+Plug 'nakul02/vim-dml'                   " DML support
+Plug 'derekwyatt/vim-scala'              " Scala support
+"Plug 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
+"Plug 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
 " Slimv notes:
 " ,d -> run function
 " ,e -> run s-expression
@@ -36,11 +29,7 @@ Plugin 'Valloric/YouCompleteMe'            " Autocomplete, jump to declaration, 
 " ,< -> move paren to left
 " ,> -> move paren to right
 " ctrl-w w -> switch buffer window
-
-" ==== Finish Vundle installs ====
-call vundle#end()          " end Vundle plugin installation
-filetype plugin indent on  " required after loading Vundle + plugins
-" ==== END VUNDLE ====
+call plug#end()
 
 " ==== General ====
 set encoding=utf-8              " files should be utf-8
