@@ -65,6 +65,8 @@ span.ansiyellow {color: #b58900;}
 div.output_stderr {background-color: #dc322f;}
 div.output_stderr pre {color: #eee8d5;}
 
+.cm-s-default.CodeMirror {background: #002b36; color: #6c71c4;}
+
 .cm-s-ipython.CodeMirror {background: #002b36; color: #eee8d5;}
 .cm-s-ipython div.CodeMirror-selected {background: #073642 !important;}
 .cm-s-ipython .CodeMirror-gutters {background: #002b36; border-right: 0px;}
