@@ -1,0 +1,10 @@
+[user]
+	name = Mike Dusenberry
+	email = EMAIL
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = vim
+[credential]
+	helper = osxkeychain
+[push]
+	default = simple
