@@ -124,7 +124,8 @@ autocmd BufReadPost *
 
 " LaTeX
 let g:tex_flavor = "latex"  " assume LaTeX vs. plaintex
-command Latexmk :sp | resize 5 | term latexmk -pdf -pvc %  " start continuous compilation
+" start continuous compilation
+command Latexmk :sp | resize 5 | term latexmk -pdf -pvc %
 
 " Remove trailing whitespace on save.
 fun! TrimWhitespace()
