@@ -16,6 +16,7 @@ Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --clang-completer'}
 Plug 'ctrlpvim/ctrlp.vim'                " CtrlP fuzzy finder
 Plug 'nakul02/vim-dml'                   " DML support
 Plug 'derekwyatt/vim-scala'              " Scala support
+Plug 'rhysd/vim-grammarous'              " Grammar check via `:GrammarousCheck`
 "Plug 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
 "Plug 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
 " Slimv notes:
@@ -120,6 +121,10 @@ autocmd BufReadPost *
   " event handler (happens when dropping a file on gvim), or when the
   " mark is in the first line (that is the default position when opening
   " a file).
+
+" LaTeX
+let g:tex_flavor = "latex"  " assume LaTeX vs. plaintex
+command Latexmk :sp | resize 5 | term latexmk -pdf -pvc %  " start continuous compilation
 
 " Remove trailing whitespace on save.
 fun! TrimWhitespace()
