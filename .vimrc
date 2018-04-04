@@ -98,10 +98,11 @@ autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
   \ setlocal showbreak=\ \  |
   \ setlocal colorcolumn= |
   \ :syn match markdownIgnore "\$.*_{.*\$" |
-  \ nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')|
-  \ nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')|
-  \ nnoremap $ g$|
-  \ nnoremap ^ g^
+  \ noremap <expr> j (v:count == 0 ? 'gj' : 'j')|
+  \ noremap <expr> k (v:count == 0 ? 'gk' : 'k')|
+  \ noremap $ g$|
+  \ noremap ^ g^
+  " note: `noremap` instead of `nnoremap` to enable the same behavior in normal and visual modes
 
 autocmd BufRead,BufNewFile *.scm.md
   \ setlocal tabstop=2 |
