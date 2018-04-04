@@ -1,7 +1,7 @@
 " ==== VIM, not vi ====
 set nocompatible  " turn off compatibility with vi
 
-"" ==== Install plugins w/ vim-plug ====
+" ==== Install plugins w/ vim-plug ====
 if empty(glob('~/.vim/autoload/plug.vim'))
   " install Plug if necessary
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -9,14 +9,20 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin('~/.vim/plugged')
-Plug 'altercation/vim-colors-solarized'  " Solarized colorscheme
-Plug 'jpalardy/vim-slime'                " Send text to any REPL in TMUX
+" Solarized colorscheme
+Plug 'altercation/vim-colors-solarized'
+" Send text to any REPL in TMUX
+Plug 'jpalardy/vim-slime'
+" Autocomplete, jump to declaration, & docs
 Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --clang-completer'}
-                                         " Autocomplete, jump to declaration, & docs
-Plug 'ctrlpvim/ctrlp.vim'                " CtrlP fuzzy finder
-Plug 'nakul02/vim-dml'                   " DML support
-Plug 'derekwyatt/vim-scala'              " Scala support
-Plug 'rhysd/vim-grammarous'              " Grammar check via `:GrammarousCheck`
+" CtrlP fuzzy finder
+Plug 'ctrlpvim/ctrlp.vim'
+" DML support
+Plug 'nakul02/vim-dml'
+" Scala support
+Plug 'derekwyatt/vim-scala'
+" Grammar check via `:GrammarousCheck`
+Plug 'rhysd/vim-grammarous'
 "Plug 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
 "Plug 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
 " Slimv notes:
@@ -89,7 +95,7 @@ colorscheme solarized           " enable the dark solarized theme
 autocmd BufRead,BufNewFile *.py
   \ setlocal tabstop=2 |
   \ setlocal shiftwidth=2
-  " These files only use 2 space indentation.
+  " these files only use 2 space indentation
 
 autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
   \ setlocal wrap |
@@ -123,12 +129,12 @@ autocmd BufReadPost *
   " mark is in the first line (that is the default position when opening
   " a file).
 
-" LaTeX
+" ==== LaTeX ====
 let g:tex_flavor = "latex"  " assume LaTeX vs. plaintex
 " start continuous compilation
 command Latexmk :sp | resize 5 | term latexmk -pdf -pvc %
 
-" Remove trailing whitespace on save.
+" === Remove trailing whitespace on save. ====
 fun! TrimWhitespace()
   let l:save = winsaveview()
   %s/\s\+$//e
@@ -146,18 +152,11 @@ inoremap jj <Esc>l
 " Map `;` to `:` for convenience.
 nnoremap ; :
 
-" Make scrolling faster.
-"nnoremap <C-e> 3<C-e>
-"nnoremap <C-y> 3<C-y>
-
-" Map Enter to writing and running the makefile.
-"noremap <CR> :w <bar> :make! <CR>
-
 " Force usage of hjkl instead of arrow keys.
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
+noremap <up> <nop>
+noremap <down> <nop>
+noremap <left> <nop>
+noremap <right> <nop>
 
 " Sane splits.
 nnoremap <c-h> <c-w>h
@@ -165,46 +164,67 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
+" Sane splits in terminal mode.
+if has('nvim')  " neovim settings
+  tnoremap <C-h> <C-\><C-n><C-w>h
+  tnoremap <C-j> <C-\><C-n><C-w>j
+  tnoremap <C-k> <C-\><C-n><C-w>k
+  tnoremap <C-l> <C-\><C-n><C-w>l
+elseif exists(":tnoremap")  " vim 8 settings
+  " NOTE: `:terminal` could exist but not be available, so this is more robust
+  " NOTE: Can use <C-\><C-n> or <C-W>N to switch to normal ("Terminal-Normal")
+  " mode.  However, in normal mode, the terminal buffer will not be updated.
+  " Thus, the split navigation mappings switch away while keeping the terminal
+  " buffer in Terminal-Job mode.  In neovim, this issue does not exist.
+  tnoremap <C-h> <C-w>h
+  tnoremap <C-j> <C-w>j
+  tnoremap <C-k> <C-w>k
+  tnoremap <C-l> <C-w>l
+endif
+
 " Map spacebar to leader, which is `\` by default.
 map <Space> <Leader>
 
-" ==== Setup SLIMV for Lisp ====
-"let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\"" -e "do script \"sbcl --load ~/.vim/slime/start-swank.lisp\"" -e "set miniaturized of front window to true" -e "end tell"'
+" ==== Terminal settings ====
+if has('nvim')  " neovim settings
+  autocmd TermOpen * setlocal bufhidden=hide  " prevent terminals from being deleted when switching
+  autocmd TermOpen * setlocal statusline+=%f  " terminal name
+  autocmd TermOpen * setlocal statusline+=%=job_id:\ %-10.3{b:terminal_job_id}  " job id for slime
+elseif exists(":tnoremap")  " vim 8 settings
+  " NOTE: `:terminal` could exist but not be available, so this is more robust
+  " prevent terminals from being deleted when switching
+  autocmd BufWinEnter * if &buftype == 'terminal' | setlocal bufhidden=hide | endif
+endif
 
 " ==== Vim-Slime settings ====
-" Leave tmux socket name set to `default`.
-" Target pane notes:
-"   ":"     means current window, current pane (a reasonable default)
-"   ":i"    means the ith window, current pane
-"   ":i.j"  means the ith window, jth pane
-"   "h:i.j" means the tmux session where h is the session identifier
-"           (either session name or number), the ith window and the jth pane
-"   "%i"    means i refers the pane's unique id
-" C-c C-c to send either the explicitly selected text, or the current
-" paragraph (i.e. results of `vip`).
-let g:slime_target = "tmux"     " enable TMUX by default
 let g:slime_python_ipython = 1  " use special pasting for iPython
+if has('nvim')  " neovim settings
+  let g:slime_target = "neovim"  " enable Neovim terminal for slime
+elseif exists(":tnoremap")  " vim 8 settings
+  " NOTE: `:terminal` could exist but not be available, so this is more robust
+  let g:slime_target = "vimterminal"  " enable Vim 8 terminal for slime
+  let g:slime_vimterminal_config = {"term_finish": "close"}  " close term buffer when finished
+else
+  " Leave tmux socket name set to `default`.
+  " Target pane notes:
+  "   ":"     means current window, current pane (a reasonable default)
+  "   ":i"    means the ith window, current pane
+  "   ":i.j"  means the ith window, jth pane
+  "   "h:i.j" means the tmux session where h is the session identifier
+  "           (either session name or number), the ith window and the jth pane
+  "   "%i"    means i refers the pane's unique id
+  " C-c C-c to send either the explicitly selected text, or the current
+  " paragraph (i.e. results of `vip`).
+  let g:slime_target = "tmux"     " enable TMUX by default
+endif
 
 " ==== YouCompleteMe settings ====
 let g:ycm_python_binary_path = 'python3'  " use Python 3
 " Show docs for current function
 " NOTE: Use `:pc[lose]` to close the "preview" window
-nnoremap <leader>d :YcmCompleter GetDoc<CR>
-nnoremap <leader>g :YcmCompleter GoTo<CR>
+nnoremap <Leader>d :YcmCompleter GetDoc<CR>
+nnoremap <Leader>g :YcmCompleter GoTo<CR>
 
-" ==== Neovim settings ====
-if has('nvim')
-  " ==== Custom mappings ====
-  " Sane splits in Terminal mode.
-  tnoremap <c-h> <C-\><C-n><C-w>h
-  tnoremap <c-j> <C-\><C-n><C-w>j
-  tnoremap <c-k> <C-\><C-n><C-w>k
-  tnoremap <c-l> <C-\><C-n><C-w>l
-
-  " ==== Vim-Slime settings ====
-  let g:slime_target = "neovim"  " enable Neovim terminal by default for slime
-  autocmd TermOpen * setlocal statusline+=%f  " terminal name
-  autocmd TermOpen * setlocal statusline+=%=job_id:\ %-10.3{b:terminal_job_id}  " job id for slime
-  autocmd TermOpen * setlocal bufhidden=hide  " prevent terminals from being deleted when switching
-endif
+" ==== Setup SLIMV for Lisp ====
+"let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\"" -e "do script \"sbcl --load ~/.vim/slime/start-swank.lisp\"" -e "set miniaturized of front window to true" -e "end tell"'
 
