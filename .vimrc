@@ -11,7 +11,7 @@ endif
 call plug#begin('~/.vim/plugged')
 " Solarized colorscheme
 Plug 'altercation/vim-colors-solarized'
-" Send text to any REPL in TMUX
+" Send text to any REPL in a vim terminal or tmux
 Plug 'jpalardy/vim-slime'
 " Autocomplete, jump to declaration, & docs
 Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --clang-completer'}
@@ -23,6 +23,14 @@ Plug 'nakul02/vim-dml'
 Plug 'derekwyatt/vim-scala'
 " Grammar check via `:GrammarousCheck`
 Plug 'rhysd/vim-grammarous'
+" Git plugins in order to be able to open code in GitHub, via the `:Gbrowse` feature
+" kind of hate adding two plugins just for that feature, but they're small...
+" `:Gbrowse` opens the link in the browser for the `origin` repository
+" `:Gbrowse!` copies the link for the `origin` repository to the clipboard
+" `:Gbrowse @repo` opens the link in the browser for the `repo` repository
+" these work with visual selections as well
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 "Plug 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
 "Plug 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
 " Slimv notes:
@@ -204,7 +212,7 @@ elseif exists(":tnoremap")  " vim 8 settings
   " NOTE: `:terminal` could exist but not be available, so this is more robust
   let g:slime_target = "vimterminal"  " enable Vim 8 terminal for slime
   let g:slime_vimterminal_config = {"term_finish": "close"}  " close term buffer when finished
-else
+else  " tmux settings
   " Leave tmux socket name set to `default`.
   " Target pane notes:
   "   ":"     means current window, current pane (a reasonable default)
@@ -215,7 +223,7 @@ else
   "   "%i"    means i refers the pane's unique id
   " C-c C-c to send either the explicitly selected text, or the current
   " paragraph (i.e. results of `vip`).
-  let g:slime_target = "tmux"     " enable TMUX by default
+  let g:slime_target = "tmux"  " enable TMUX by default
 endif
 
 " ==== YouCompleteMe settings ====
