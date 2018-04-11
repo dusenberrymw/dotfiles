@@ -140,7 +140,14 @@ autocmd BufReadPost *
 " ==== LaTeX ====
 let g:tex_flavor = "latex"  " assume LaTeX vs. plaintex
 " start continuous compilation
-command Latexmk :sp | resize 5 | term latexmk -pdf -pvc %
+fun! Latexmk()
+  if has('nvim')  " neovim settings
+    sp | resize 5 | term latexmk -pdf -pvc %
+  else  " vim 8 settings
+    term ++close ++rows=5 latexmk -pdf -pvc %
+  endif
+endfun
+command! Latexmk :call Latexmk()
 
 " === Remove trailing whitespace on save. ====
 fun! TrimWhitespace()
@@ -152,7 +159,7 @@ autocmd BufWritePre * :call TrimWhitespace()
 
 " ==== Custom mappings ====
 " Note: Make sure there are no spaces left after each command, or they
-"       will become part of the command.
+" will become part of the command.
 " Map `jj` to `Escape, l` in Insert mode, where the `l` prevents the cursor
 " from moving backwards.
 inoremap jj <Esc>l
