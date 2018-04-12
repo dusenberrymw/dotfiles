@@ -48,6 +48,7 @@ call plug#end()
 
 " ==== General ====
 set encoding=utf-8              " files should be utf-8
+set laststatus=2                " always show the status line
 set title                       " show file name in title bar
 set ruler                       " show current cursor position at bottom right
 set visualbell                  " no sounds
@@ -55,6 +56,10 @@ set backspace=indent,eol,start  " fix backspace issues
 set clipboard=unnamed           " use system clipboard for yank/paste
 set number relativenumber       " show number of current line & relative numbers of all other lines
 set spell                       " enable spell checking
+set autoread                    " automatically read the file if it has been changed outside of vim
+set nolangremap                 " prevent mappings from breaking
+set ttimeout                    " time out for key codes
+set ttimeoutlen=100             " wait up to 100ms after Esc for special key
 
 " ==== Backup, swap, and undo files ====
 set nobackup                    " turn off backup files
@@ -71,10 +76,13 @@ set showcmd                     " show incomplete commands at bottom
 set tabstop=2                   " tabs should be 2 columns wide
 set shiftwidth=2                " indentation should be 2 columns wide
 set expandtab                   " expand tabs to spaces
+set autoindent                  " auto indent next line based on current line
 
 " ==== Lines ====
 set nowrap                      " don't soft-wrap to window width
 set colorcolumn=100             " highlight column 100
+set display+=lastline           " display as much of the last line as possible
+set formatoptions+=j            " delete comment character when joining commented lines
 
 " ==== Scrolling ====
 set scrolloff=3                 " keep three lines between cursor and window edge
