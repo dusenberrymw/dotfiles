@@ -74,7 +74,9 @@ set showcmd                     " show incomplete commands at bottom
 
 " ==== Indentation (default) ====
 set tabstop=2                   " tabs should be 2 columns wide
+set softtabstop=2               " tabs should be 2 columns wide
 set shiftwidth=2                " indentation should be 2 columns wide
+set smarttab                    " tabs should insert blanks according to `shiftwidth`
 set expandtab                   " expand tabs to spaces
 set autoindent                  " auto indent next line based on current line
 
@@ -110,7 +112,8 @@ colorscheme solarized           " enable the dark solarized theme
 " ==== Filetype specific ====
 autocmd BufRead,BufNewFile *.py
   \ setlocal tabstop=2 |
-  \ setlocal shiftwidth=2
+  \ setlocal shiftwidth=2 |
+  \ setlocal softtabstop=2
   " these files only use 2 space indentation
 
 autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
