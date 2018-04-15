@@ -1,5 +1,8 @@
 shopt -s globstar
 
+# display the hostname, current directory, and username in the prompt
+PS1='\h:\W \u\$ '
+
 #export CUDA_HOME=/usr/local/cuda
 #export CUDNN_HOME=/usr/local/cudnn
 #export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$CUDA_HOME/lib:$CUDNN_HOME/lib
