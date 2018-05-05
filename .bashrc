@@ -3,8 +3,8 @@
 
 # set the command prompt format to display the username, hostname, and current directory
 #PS1='\h:\W \u\$ '
-#PS1='\u@\h \W\$ '
-PS1='\u@\h:\W\$ '
+#PS1='\u@\h:\W\$ '
+PS1='\u@\h \W\$ '
 
 # set the terminal title
 # NOTE: this strips the hostname to just the initial part before any dot, and replaces the home
