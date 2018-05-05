@@ -159,6 +159,8 @@ fun! Latexmk()
   endif
 endfun
 command! Latexmk :call Latexmk()
+" cleanup
+command! LatexmkClean term ++close ++rows=5 latexmk -C
 
 " === Remove trailing whitespace on save. ====
 fun! TrimWhitespace()
