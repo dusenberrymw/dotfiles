@@ -23,14 +23,8 @@ Plug 'nakul02/vim-dml'
 Plug 'derekwyatt/vim-scala'
 " Grammar check via `:GrammarousCheck`
 Plug 'rhysd/vim-grammarous'
-" Git plugins in order to be able to open code in GitHub, via the `:Gbrowse` feature
-" kind of hate adding two plugins just for that feature, but they're small...
-" `:Gbrowse` opens the link in the browser for the `origin` repository
-" `:Gbrowse!` copies the link for the `origin` repository to the clipboard
-" `:Gbrowse @repo` opens the link in the browser for the `repo` repository
-" these work with visual selections as well
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
+" Open code in GitHub with `<leader>gh`
+Plug 'ruanyl/vim-gh-line'
 "Plug 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
 "Plug 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
 " Slimv notes:
