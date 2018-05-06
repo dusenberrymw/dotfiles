@@ -24,10 +24,10 @@ use-java () {
 use-java 8
 
 clean-python () {
-  find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+  find . \( -name "__pycache__" -o -name "*.pyc" -o -name "*.pyo" \) -exec rm -rf {} +
 }
 
 clean-ds_store () {
-  find . | grep -E "(\.DS_Store)" | xargs rm -rf
+  find . -name ".DS_Store" -exec rm {} +
 }
 
