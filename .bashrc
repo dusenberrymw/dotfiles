@@ -1,8 +1,6 @@
 shopt -s globstar
 
 # set the command prompt format to display the username, hostname, and current directory
-#PS1='\h:\W \u\$ '
-#PS1='\u@\h:\W\$ '
 PS1='\u@\h \W\$ '
 
 # set the terminal title
@@ -21,7 +19,7 @@ use-java () {
   export JAVA_HOME=`/usr/libexec/java_home -v 1.$1`
 }
 
-use-java 8
+#use-java 8
 
 clean-python () {
   find . \( -name "__pycache__" -o -name "*.pyc" -o -name "*.pyo" \) -exec rm -rf {} +
