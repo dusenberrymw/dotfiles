@@ -12,8 +12,8 @@ PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/
 #export CUDNN_HOME=/usr/local/cudnn
 #export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$CUDA_HOME/lib:$CUDNN_HOME/lib
 #export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$CUDA_HOME/include:$CUDNN_HOME/include
-#export PATH=/usr/local/bin:/usr/local/sbin:$CUDA_HOME/bin:/usr/texbin:~/Dropbox/Code/scripts:$PATH
-export PATH=/usr/local/bin:/usr/local/sbin:~/Dropbox/Code/scripts:$PATH
+#export PATH=/usr/local/bin:/usr/local/sbin:$CUDA_HOME/bin:/usr/texbin:~/.scripts:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:~/.scripts:$PATH
 
 use-java () {
   export JAVA_HOME=`/usr/libexec/java_home -v 1.$1`
