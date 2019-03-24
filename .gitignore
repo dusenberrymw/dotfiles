@@ -1,6 +1,6 @@
 .gitconfig
 .jupyter/migrated
-.vim/autoload/plug.vim
+.vim/autoload/plug.vim*
 .vim/.netrwhist
 .vim/plugged/*
 !.vim/plugged/.keep
