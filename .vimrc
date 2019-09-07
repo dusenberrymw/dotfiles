@@ -9,35 +9,28 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin('~/.vim/plugged')
-" Solarized colorscheme
-Plug 'altercation/vim-colors-solarized'
-" Send text to any REPL in a vim terminal or tmux
-Plug 'jpalardy/vim-slime'
-" Autocomplete, jump to declaration, & docs
-Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --clang-completer'}
-" CtrlP fuzzy finder
-Plug 'ctrlpvim/ctrlp.vim'
-" DML support
-Plug 'nakul02/vim-dml'
-" Scala support
-Plug 'derekwyatt/vim-scala'
-" Grammar check via `:GrammarousCheck`
-Plug 'rhysd/vim-grammarous'
-" Open code in GitHub with `<leader>gh`
-Plug 'ruanyl/vim-gh-line'
-"Plug 'kovisoft/slimv'                   " SLIME mode for VIM (Lisp-only)
-"Plug 'dusenberrymw/slimv'               "  - fixed bug for MIT-Scheme swank server
-" Slimv notes:
-" ,d -> run function
-" ,e -> run s-expression
-" ,b -> run entire file
-" ,S -> splice outer pair of parens
-" ,O -> split s-expressions
-" ,J -> join s-expressions
-" ,I -> raise s-expression subform
-" ,< -> move paren to left
-" ,> -> move paren to right
-" ctrl-w w -> switch buffer window
+Plug 'altercation/vim-colors-solarized'  " Solarized colorscheme
+Plug 'jpalardy/vim-slime'  " Send text to any REPL in a vim terminal or tmux
+Plug 'JuliaEditorSupport/julia-vim'  " Julia support
+function! BuildLanguageClient(info)
+  " Info is a dictionary with 3 fields:
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
+  if a:info.status == 'installed' || a:info.force
+    !bash install.sh
+    !pip3 install -U python-language-server
+    !julia -e 'using Pkg; Pkg.add("LanguageServer"); Pkg.add("SymbolServer"); Pkg.add("StaticLint")'
+  endif
+endfunction
+Plug 'autozimu/LanguageClient-neovim', {
+    \'branch': 'next',
+    \'do': function('BuildLanguageClient') }  " supports autocomplete, jump to declaration, & docs
+Plug 'lifepillar/vim-mucomplete'  " autocomplete
+Plug 'ctrlpvim/ctrlp.vim'  " CtrlP fuzzy finder
+Plug 'nakul02/vim-dml'  " DML support
+Plug 'rhysd/vim-grammarous'  " Grammar check via `:GrammarousCheck`
+Plug 'ruanyl/vim-gh-line'  " Open code in GitHub with `<leader>gh`
 call plug#end()
 
 " ==== General ====
@@ -93,10 +86,14 @@ set hlsearch                    " highlight search results
 " ==== Windows/Panes ====
 set splitbelow                  " open splits below current buffer
 set splitright                  " open vertical splits to the right of the current buffer
+set noequalalways               " don't automatically change split sizes
 
 " ==== Filetypes ====
 filetype plugin indent on       " automatic indentation based on language
 syntax on                       " turn on syntax highlighting
+
+" matchit
+runtime macros/matchit.vim
 
 " ==== Theme ====
 syntax enable
@@ -192,8 +189,7 @@ if has('nvim')  " neovim settings
   tnoremap <C-j> <C-\><C-n><C-w>j
   tnoremap <C-k> <C-\><C-n><C-w>k
   tnoremap <C-l> <C-\><C-n><C-w>l
-elseif exists(":tnoremap")  " vim 8 settings
-  " NOTE: `:terminal` could exist but not be available, so this is more robust
+elseif has("terminal")  " vim 8 settings
   " NOTE: Can use <C-\><C-n> or <C-W>N to switch to normal ("Terminal-Normal")
   " mode.  However, in normal mode, the terminal buffer will not be updated.
   " Thus, the split navigation mappings switch away while keeping the terminal
@@ -212,18 +208,17 @@ if has('nvim')  " neovim settings
   autocmd TermOpen * setlocal bufhidden=hide  " prevent terminals from being deleted when switching
   autocmd TermOpen * setlocal statusline+=%f  " terminal name
   autocmd TermOpen * setlocal statusline+=%=job_id:\ %-10.3{b:terminal_job_id}  " job id for slime
-elseif exists(":tnoremap")  " vim 8 settings
-  " NOTE: `:terminal` could exist but not be available, so this is more robust
-  " prevent terminals from being deleted when switching
-  autocmd BufWinEnter * if &buftype == 'terminal' | setlocal bufhidden=hide | endif
+elseif has("terminal")  " vim 8 settings
+  " Prevent terminals from being deleted when switching.
+  autocmd TerminalOpen * if &buftype == 'terminal' | setlocal bufhidden=hide | endif
+  hi clear Terminal
 endif
 
 " ==== Vim-Slime settings ====
 let g:slime_python_ipython = 1  " use special pasting for iPython
 if has('nvim')  " neovim settings
   let g:slime_target = "neovim"  " enable Neovim terminal for slime
-elseif exists(":tnoremap")  " vim 8 settings
-  " NOTE: `:terminal` could exist but not be available, so this is more robust
+elseif has("terminal")  " vim 8 settings
   let g:slime_target = "vimterminal"  " enable Vim 8 terminal for slime
   let g:slime_vimterminal_config = {"term_finish": "close"}  " close term buffer when finished
 else  " tmux settings
@@ -240,15 +235,37 @@ else  " tmux settings
   let g:slime_target = "tmux"  " enable TMUX by default
 endif
 
-" ==== YouCompleteMe settings ====
-let g:ycm_python_binary_path = 'python3'  " use Python 3
-" Show docs for current function
-" NOTE: Use `:pc[lose]` to close the "preview" window
-nnoremap <Leader>d :YcmCompleter GetDoc<CR>
-nnoremap <Leader>g :YcmCompleter GoTo<CR>
+" ==== Language Server settings ====
+let g:default_julia_version = '1.1'
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_serverCommands = {
+\  'python': ['/usr/local/bin/pyls'],
+\  'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+\     using LanguageServer;
+\     using Pkg;
+\     import StaticLint;
+\     import SymbolServer;
+\     env_path = dirname(Pkg.Types.Context().env.project_file);
+\     debug = false;
+\     server = LanguageServer.LanguageServerInstance(stdin, stdout, debug, env_path, "", Dict());
+\     server.runlinter = true;
+\     run(server);
+\  ']
+\ }
+nnoremap <silent> <Leader>d :pc<CR> :call LanguageClient_textDocument_hover()<CR>h
+nnoremap <silent> <Leader>g :call LanguageClient_textDocument_definition()<CR>
 
-" ==== Setup SLIMV for Lisp ====
-"let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\"" -e "do script \"sbcl --load ~/.vim/slime/start-swank.lisp\"" -e "set miniaturized of front window to true" -e "end tell"'
+" ==== MUComplete settings ====
+set completeopt-=preview  " prevent preview window from opening during auto-completion
+set completeopt-=longest  " prevent autocompletion while typing, but still allow menu to pop up
+set completeopt+=menuone,noselect
+let g:mucomplete#always_use_completeopt = 1
+let g:mucomplete#enable_auto_at_startup = 1
+let g:mucomplete#completion_delay = 500  " milliseconds
+set shortmess+=c  " Shut off completion messages
+
+" ==== Julia settings ====
+let g:latex_to_unicode_auto=1
 
 " ==== Zotero ====
 function! ZoteroCite()
