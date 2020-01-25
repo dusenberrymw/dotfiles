@@ -30,12 +30,6 @@ alias upd_hist="history -a; history -c; history -r"  # append, and update termin
 #export PATH=/usr/local/bin:/usr/local/sbin:$CUDA_HOME/bin:/usr/texbin:~/.scripts:$PATH
 export PATH=/usr/local/bin:/usr/local/sbin:~/.scripts:$PATH
 
-use-java () {
-  export JAVA_HOME=`/usr/libexec/java_home -v 1.$1`
-}
-
-#use-java 8
-
 clean-python () {
   find . \( -name "__pycache__" -o -name "*.pyc" -o -name "*.pyo" \) -exec rm -rf {} +
 }
@@ -43,3 +37,5 @@ clean-python () {
 clean-ds_store () {
   find . -name ".DS_Store" -exec rm {} +
 }
+
+export HOMEBREW_NO_ANALYTICS=1
