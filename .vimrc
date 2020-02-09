@@ -104,7 +104,8 @@ colorscheme solarized           " enable the dark solarized theme
 autocmd BufRead,BufNewFile *.py
   \ setlocal tabstop=2 |
   \ setlocal shiftwidth=2 |
-  \ setlocal softtabstop=2
+  \ setlocal softtabstop=2 |
+  \ setlocal textwidth=100
   " these files only use 2 space indentation
 
 autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
@@ -212,7 +213,9 @@ if has('nvim')  " neovim settings
 elseif has("terminal")  " vim 8 settings
   " Prevent terminals from being deleted when switching.
   autocmd TerminalOpen * if &buftype == 'terminal' | setlocal bufhidden=hide | endif
-  hi clear Terminal
+  "hi clear Terminal  " note: this could be fixed by setting hi Terminal to be the same as Normal
+  "hi! link Terminal Normal
+  hi Terminal ctermbg=None
 endif
 
 " ==== Vim-Slime settings ====
@@ -261,8 +264,8 @@ set completeopt-=preview  " prevent preview window from opening during auto-comp
 set completeopt-=longest  " prevent autocompletion while typing, but still allow menu to pop up
 set completeopt+=menuone,noselect
 let g:mucomplete#always_use_completeopt = 1
-let g:mucomplete#enable_auto_at_startup = 1
-let g:mucomplete#completion_delay = 500  " milliseconds
+"let g:mucomplete#enable_auto_at_startup = 1
+"let g:mucomplete#completion_delay = 500  " milliseconds
 set shortmess+=c  " Shut off completion messages
 
 " ==== Julia settings ====
