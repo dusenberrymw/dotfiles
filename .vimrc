@@ -2,16 +2,15 @@
 set nocompatible  " turn off compatibility with vi
 
 " ==== Install plugins w/ vim-plug ====
-if empty(glob('~/.vim/autoload/plug.vim'))
-  " install Plug if necessary
+if empty(glob('~/.vim/autoload/plug.vim'))  " install Plug if necessary
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin('~/.vim/plugged')
 Plug 'altercation/vim-colors-solarized'  " Solarized colorscheme
-Plug 'jpalardy/vim-slime'  " Send text to any REPL in a vim terminal or tmux
-Plug 'JuliaEditorSupport/julia-vim'  " Julia support
+Plug 'jpalardy/vim-slime'                " Send text to any REPL in a vim terminal or tmux
+Plug 'JuliaEditorSupport/julia-vim'      " Julia support
 function! BuildLanguageClient(info)
   " Info is a dictionary with 3 fields:
   " - name:   name of the plugin
@@ -26,11 +25,11 @@ endfunction
 Plug 'autozimu/LanguageClient-neovim', {
     \'branch': 'next',
     \'do': function('BuildLanguageClient') }  " supports autocomplete, jump to declaration, & docs
-Plug 'lifepillar/vim-mucomplete'  " autocomplete
-Plug 'ctrlpvim/ctrlp.vim'  " CtrlP fuzzy finder
-Plug 'nakul02/vim-dml'  " DML support
-Plug 'rhysd/vim-grammarous'  " Grammar check via `:GrammarousCheck`
-Plug 'ruanyl/vim-gh-line'  " Open code in GitHub with `<leader>gh`
+Plug 'lifepillar/vim-mucomplete'              " autocomplete
+Plug 'ctrlpvim/ctrlp.vim'                     " CtrlP fuzzy finder
+Plug 'nakul02/vim-dml'                        " DML support
+Plug 'rhysd/vim-grammarous'                   " Grammar check via `:GrammarousCheck`
+Plug 'ruanyl/vim-gh-line'                     " Open code in GitHub with `<leader>gh`
 call plug#end()
 
 " ==== General ====
@@ -41,12 +40,11 @@ set ruler                       " show current cursor position at bottom right
 set visualbell                  " no sounds
 set backspace=indent,eol,start  " fix backspace issues
 set clipboard=unnamed           " use system clipboard for yank/paste
-set number relativenumber       " show number of current line & relative numbers of all other lines
-set spell                       " enable spell checking
 set autoread                    " automatically read the file if it has been changed outside of vim
 set nolangremap                 " prevent mappings from breaking
 set ttimeout                    " time out for key codes
 set ttimeoutlen=100             " wait up to 100ms after Esc for special key
+set spell                       " enable spell checking
 
 " ==== Backup, swap, and undo files ====
 set nobackup                    " turn off backup files
@@ -59,6 +57,13 @@ set wildmode=longest,list,full  " shell-style tab completion
 set wildmenu                    " show menu of possible commands as you type
 set showcmd                     " show incomplete commands at bottom
 
+" ==== Searching ====
+set ignorecase                  " ignore case in file
+set smartcase                   " unless search term has case
+set incsearch                   " search while typing
+set hlsearch                    " highlight search results
+"set shell+=\ -O\ globstar       " use `shopt -s globstar` for `:grep` searches
+
 " ==== Indentation (default) ====
 set tabstop=2                   " tabs should be 2 columns wide
 set softtabstop=2               " tabs should be 2 columns wide
@@ -68,39 +73,30 @@ set expandtab                   " expand tabs to spaces
 set autoindent                  " auto indent next line based on current line
 
 " ==== Lines ====
+set number relativenumber       " show number of current line & relative numbers of all other lines
 set nowrap                      " don't soft-wrap to window width
 set colorcolumn=100             " highlight column 100
 set display+=lastline           " display as much of the last line as possible
 set formatoptions+=j            " delete comment character when joining commented lines
-
-" ==== Scrolling ====
 set scrolloff=3                 " keep three lines between cursor and window edge
-
-" ==== Searching ====
-set ignorecase                  " ignore case in file
-set smartcase                   " unless search term has case
-set incsearch                   " search while typing
-set hlsearch                    " highlight search results
-"set shell+=\ -O\ globstar       " use `shopt -s globstar` for `:grep` searches
 
 " ==== Windows/Panes ====
 set splitbelow                  " open splits below current buffer
 set splitright                  " open vertical splits to the right of the current buffer
 set noequalalways               " don't automatically change split sizes
 
-" ==== Filetypes ====
-filetype plugin indent on       " automatic indentation based on language
-syntax on                       " turn on syntax highlighting
-
-" matchit
-runtime macros/matchit.vim
-
 " ==== Theme ====
-syntax enable
+syntax on                       " turn on syntax highlighting
 set background=dark
 colorscheme solarized           " enable the dark solarized theme
+if exists("$VIM_TERMINAL")      " prevent color issues with vim inside a vim terminal
+  hi Normal ctermbg=None
+endif
 
-" ==== Filetype specific ====
+" ==== Filetypes ====
+filetype plugin indent on       " automatic indentation based on language
+runtime macros/matchit.vim      " Better syntax matching
+
 autocmd BufRead,BufNewFile *.py
   \ setlocal tabstop=2 |
   \ setlocal shiftwidth=2 |
@@ -139,20 +135,6 @@ autocmd BufReadPost *
   " event handler (happens when dropping a file on gvim), or when the
   " mark is in the first line (that is the default position when opening
   " a file).
-
-" ==== LaTeX ====
-let g:tex_flavor = "latex"  " assume LaTeX vs. plaintex
-" start continuous compilation
-fun! Latexmk()
-  if has('nvim')  " neovim settings
-    sp | resize 5 | term latexmk -pdf -pvc %
-  else  " vim 8 settings
-    term ++close ++rows=5 latexmk -pdf -pvc %
-  endif
-endfun
-command! Latexmk :call Latexmk()
-" cleanup
-command! LatexmkClean term ++close ++rows=5 latexmk -C
 
 " === Remove trailing whitespace on save. ====
 fun! TrimWhitespace()
@@ -213,8 +195,6 @@ if has('nvim')  " neovim settings
 elseif has("terminal")  " vim 8 settings
   " Prevent terminals from being deleted when switching.
   autocmd TerminalOpen * if &buftype == 'terminal' | setlocal bufhidden=hide | endif
-  "hi clear Terminal  " note: this could be fixed by setting hi Terminal to be the same as Normal
-  "hi! link Terminal Normal
   hi Terminal ctermbg=None
 endif
 
@@ -271,6 +251,20 @@ set shortmess+=c  " Shut off completion messages
 " ==== Julia settings ====
 let g:latex_to_unicode_auto=1
 
+" ==== LaTeX ====
+let g:tex_flavor = "latex"  " assume LaTeX vs. plaintex
+" start continuous compilation
+fun! Latexmk()
+  if has('nvim')  " neovim settings
+    sp | resize 5 | term latexmk -pdf -pvc %
+  else  " vim 8 settings
+    term ++close ++rows=5 latexmk -pdf -pvc %
+  endif
+endfun
+command! Latexmk :call Latexmk()
+" cleanup
+command! LatexmkClean term ++close ++rows=5 latexmk -C
+
 " ==== Zotero ====
 function! ZoteroCite()
   " pick a format based on the filetype (customize at will)
@@ -279,6 +273,5 @@ function! ZoteroCite()
   let ref = system('curl -s '.shellescape(api_call))
   return ref
 endfunction
-
 noremap <leader>z "=ZoteroCite()<CR>p
 inoremap <C-z> <C-r>=ZoteroCite()<CR>
