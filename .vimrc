@@ -18,7 +18,8 @@ function! BuildLanguageClient(info)
   " - force:  set on PlugInstall! or PlugUpdate!
   if a:info.status == 'installed' || a:info.force
     !bash install.sh
-    !pip3 install -U python-language-server
+    !python3 -m pip install -U pip setuptools wheel
+    !python3 -m pip install -U python-language-server[yapf]
     !julia -e 'using Pkg; Pkg.add("LanguageServer"); Pkg.add("SymbolServer"); Pkg.add("StaticLint")'
   endif
 endfunction
@@ -27,7 +28,6 @@ Plug 'autozimu/LanguageClient-neovim', {
     \'do': function('BuildLanguageClient') }  " supports autocomplete, jump to declaration, & docs
 Plug 'lifepillar/vim-mucomplete'              " autocomplete
 Plug 'ctrlpvim/ctrlp.vim'                     " CtrlP fuzzy finder
-Plug 'nakul02/vim-dml'                        " DML support
 Plug 'rhysd/vim-grammarous'                   " Grammar check via `:GrammarousCheck`
 Plug 'ruanyl/vim-gh-line'                     " Open code in GitHub with `<leader>gh`
 call plug#end()
@@ -252,6 +252,12 @@ set shortmess+=c  " Shut off completion messages
 let g:latex_to_unicode_auto=1
 
 " ==== LaTeX ====
+" NOTE: will need to do the following to install `latexmk`:
+" ```
+" sudo chown -R dusenberrymw:staff /usr/local/texlive
+" tlmgr update --self
+" tlmgr install latexmk
+" ```
 let g:tex_flavor = "latex"  " assume LaTeX vs. plaintex
 " start continuous compilation
 fun! Latexmk()
@@ -275,3 +281,7 @@ function! ZoteroCite()
 endfunction
 noremap <leader>z "=ZoteroCite()<CR>p
 inoremap <C-z> <C-r>=ZoteroCite()<CR>
+
+" Cursor
+let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
+let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
