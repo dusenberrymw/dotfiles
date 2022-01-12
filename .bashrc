@@ -2,10 +2,9 @@
 # ---
 stty -ixon  # disable ctrl-s freezing feature
 set -o ignoreeof  # prevent accidental exits with ctrl-d
-shopt -s globstar  # allow searching with wildcards
 
-# Set the command prompt format to display the username, hostname, and current directory.
-PS1='\u@\h \W\$ '
+# Set the command prompt format to display the hostname and current directory.
+PS1='\h:\W\$ '
 
 # Set the terminal title.
 # NOTE: This strips the hostname to just the initial part before any dot, and replaces the home
@@ -23,12 +22,7 @@ shopt -s histappend  # append to history file on close
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"  # append to the history file at each prompt
 alias upd_hist="history -a; history -c; history -r"  # append, and update terminal history from file
 
-#export CUDA_HOME=/usr/local/cuda
-#export CUDNN_HOME=/usr/local/cudnn
-#export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$CUDA_HOME/lib:$CUDNN_HOME/lib
-#export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$CUDA_HOME/include:$CUDNN_HOME/include
-#export PATH=/usr/local/bin:/usr/local/sbin:$CUDA_HOME/bin:/usr/texbin:~/.scripts:$PATH
-export PATH=/usr/local/bin:/usr/local/sbin:~/.scripts:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:~/.scripts:/usr/local/opt/ruby/bin:$PATH
 
 clean-python () {
   find . \( -name "__pycache__" -o -name "*.pyc" -o -name "*.pyo" \) -exec rm -rf {} +
