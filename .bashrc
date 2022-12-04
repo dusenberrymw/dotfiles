@@ -16,8 +16,8 @@ PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/
 # NOTE: The `upd_hist` can be used to update the history in a given terminal from the history file,
 # i.e., from all other terminal sessions.
 export HISTSIZE=  # unlimited in-terminal history size
-export HISTFILESIZE=  # unlimited history file size
-export HISTCONTROL=ignoredups:erasedups  # ignore duplicate entries
+export HISTFILESIZE=-1  # unlimited history file size
+export HISTCONTROL=  #ignoredups #:erasedups  # ignore duplicate entries
 shopt -s histappend  # append to history file on close
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"  # append to the history file at each prompt
 alias upd_hist="history -a; history -c; history -r"  # append, and update terminal history from file
