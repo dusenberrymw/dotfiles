@@ -1,8 +1,0 @@
-[global]
-floatX = float32
-device = cuda
-optimizer_including=cudnn
-
-[dnn]
-library_path = /usr/local/cudnn/lib
-include_path = /usr/local/cudnn/include
