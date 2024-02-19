@@ -1,1 +1,1 @@
-$pdf_previewer = "open -a Skim";
+% $pdf_previewer = "open -a Skim";
