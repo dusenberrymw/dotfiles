@@ -1,36 +1,14 @@
 " ==== VIM, not vi ====
 set nocompatible  " turn off compatibility with vi
 
-" ==== Install plugins w/ vim-plug ====
-if empty(glob('~/.vim/autoload/plug.vim'))  " install Plug if necessary
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-call plug#begin('~/.vim/plugged')
-"Plug 'dusenberrymw/vim-colors-solarized'  " Solarized colorscheme
-Plug 'dusenberrymw/vim-slime'             " Send text to any REPL in a vim terminal or tmux
-"Plug 'JuliaEditorSupport/julia-vim'       " Julia support
-Plug 'rust-lang/rust.vim'                 " Rust support.
-function! BuildLanguageClient(info)
-  " Info is a dictionary with 3 fields:
-  " - name:   name of the plugin
-  " - status: 'installed', 'updated', or 'unchanged'
-  " - force:  set on PlugInstall! or PlugUpdate!
-  if a:info.status == 'installed' || a:info.force
-    !bash install.sh
-    !/usr/local/bin/python3 -m pip install -U pip setuptools wheel
-    !/usr/local/bin/python3 -m pip install -U python-language-server[yapf]
-    "!julia -e 'using Pkg; Pkg.add("LanguageServer"); Pkg.add("SymbolServer"); Pkg.add("StaticLint")'
-  endif
-endfunction
-Plug 'autozimu/LanguageClient-neovim', {
-    \'branch': 'next',
-    \'do': function('BuildLanguageClient') }  " supports autocomplete, jump to declaration, & docs
-Plug 'dusenberrymw/vim-mucomplete'            " autocomplete
-"Plug 'rhysd/vim-grammarous'                   " Grammar check via `:GrammarousCheck`
-"Plug 'ruanyl/vim-gh-line'                     " Open code in GitHub with `<leader>gh`
-call plug#end()
+" ==== Plugins ====
+" uses the native vim package manager via `:help packages` with plugins
+" located within `~/.vim/pack/plugins/`. git clone into either `start` to
+" always load the plugin, or into `opt` to manually load with `packadd <name>`.
+"
+" `git clone https://github.com/dusenberrymw/vim-slime.git ~/.vim/pack/plugins/start/vim-slime`
+" `git clone https://github.com/dusenberrymw/vim-mucomplete.git ~/.vim/pack/plugins/start/vim-mucomplete`
+" `git clone https://github.com/rust-lang/rust.vim ~/.vim/pack/plugins/opt/rust.vim`
 
 " ==== General ====
 set encoding=utf-8              " files should be utf-8
@@ -73,7 +51,8 @@ set autoindent                  " auto indent next line based on current line
 " ==== Lines ====
 set number relativenumber       " show number of current line & relative numbers of all other lines
 set nowrap                      " don't soft-wrap to window width
-set colorcolumn=80              " highlight column 100
+set textwidth=80                " set the max text width to 80 characters
+set colorcolumn=80              " highlight column 80
 set display+=lastline           " display as much of the last line as possible
 set formatoptions+=j            " delete comment character when joining commented lines
 set scrolloff=3                 " keep three lines between cursor and window edge
@@ -91,6 +70,10 @@ if exists("$VIM_TERMINAL")      " prevent color issues with vim inside a vim ter
   hi Normal ctermbg=None
 endif
 
+" ==== Cursor ====
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"  " Vertical bar in insert mode
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"  " Block in normal mode
+
 " ==== Filetypes ====
 filetype plugin indent on       " automatic indentation based on language
 runtime macros/matchit.vim      " Better syntax matching
@@ -99,8 +82,9 @@ autocmd BufRead,BufNewFile *.py
   \ setlocal tabstop=2 |
   \ setlocal shiftwidth=2 |
   \ setlocal softtabstop=2 |
-  \ setlocal textwidth=80
-  " these files only use 2 space indentation
+  \ setlocal textwidth=80 |
+  \ nnoremap <leader>b obreakpoint()<Esc>|
+  \ nnoremap <leader>B Obreakpoint()<Esc>
 
 autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
   \ setlocal wrap |
@@ -112,7 +96,8 @@ autocmd BufRead,BufNewFile *.txt,*.tex,*.md,*.markdown,*.conf,COMMIT_EDITMSG
   \ noremap <expr> j (v:count == 0 ? 'gj' : 'j')|
   \ noremap <expr> k (v:count == 0 ? 'gk' : 'k')|
   \ noremap $ g$|
-  \ noremap ^ g^
+  \ noremap ^ g^|
+  \ let g:tex_flavor = "latex"
   " note: `noremap` instead of `nnoremap` to enable the same behavior in normal and visual modes
 
 autocmd BufRead,BufNewFile *.scm.md
@@ -123,6 +108,9 @@ autocmd BufRead,BufNewFile *.scm.md
   " Special setting for markdown with scheme code within setting ft to
   " scheme and then back to markdown.
   " Will trigger load of slimv, but retain markdown syntax highlighting.
+
+autocmd BufRead,BufNewFile *.rs
+  \ :packadd! rust.vim
 
 autocmd BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
@@ -217,89 +205,9 @@ else  " tmux settings
   let g:slime_target = "tmux"  " enable TMUX by default
 endif
 
-" ==== Language Server settings ====
-let g:LanguageClient_autoStart = 1
-" NOTE: Need to `brew install julia rust rust-analyzer rustfmt ghc haskell-language-server`.
-let g:LanguageClient_serverCommands = {
-\  'python': ['/usr/local/bin/pyls'],
-"\  'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-"\     using LanguageServer;
-"\     using Pkg;
-"\     import StaticLint;
-"\     import SymbolServer;
-"\     env_path = dirname(Pkg.Types.Context().env.project_file);
-"\     debug = false;
-"\     server = LanguageServer.LanguageServerInstance(stdin, stdout, debug, env_path, "", Dict());
-"\     server.runlinter = true;
-"\     run(server);
-"\  '],
-\ 'c': ['clangd'],
-\ 'cpp': ['clangd'],
-\ 'rust': ['rust-analyzer'],
-"\ 'haskell': ['haskell-language-server-wrapper', '--lsp'],
-\ }
-let g:LanguageClient_useFloatingHover = 0
-let g:LanguageClient_usePopupHover = 0
-
-nnoremap <Leader>d :pc<CR> :call LanguageClient#textDocument_hover()<CR>h
-nnoremap <leader>g :call LanguageClient#textDocument_definition({'gotoCmd': 'split'})<CR>
-nnoremap <leader>r :call LanguageClient#textDocument_rename()<CR>
-nnoremap <leader>f :call LanguageClient#textDocument_formatting()<CR>
-nnoremap <leader>t :call LanguageClient#textDocument_typeDefinition()<CR>
-nnoremap <leader>x :call LanguageClient#textDocument_references()<CR>
-nnoremap <leader>a :call LanguageClient#workspace_applyEdit()<CR>
-nnoremap <leader>c :call LanguageClient#textDocument_completion()<CR>
-nnoremap <leader>s :call LanguageClient#textDocument_documentSymbol()<CR>
-nnoremap <leader>m :call LanguageClient_contextMenu()<CR>
-
 " ==== MUComplete settings ====
 set completeopt-=preview  " prevent preview window from opening during auto-completion
 set completeopt-=longest  " prevent autocompletion while typing, but still allow menu to pop up
 set completeopt+=menuone,noselect
 let g:mucomplete#always_use_completeopt = 1
-"let g:mucomplete#enable_auto_at_startup = 1
-"let g:mucomplete#completion_delay = 500  " milliseconds
 set shortmess+=c  " Shut off completion messages
-
-" ==== Julia settings ====
-"let g:default_julia_version = '1.1'
-"let g:latex_to_unicode_auto=1
-
-" ==== LaTeX ====
-" NOTE: will need to do the following to install `latexmk`:
-" ```
-" sudo chown -R dusenberrymw:staff /usr/local/texlive
-" tlmgr update --self
-" tlmgr install latexmk
-" ```
-let g:tex_flavor = "latex"  " assume LaTeX vs. plaintex
-" start continuous compilation
-fun! Latexmk()
-  if has('nvim')  " neovim settings
-    sp | resize 5 | term latexmk -pdf -pvc %
-  else  " vim 8 settings
-    term ++close ++rows=5 latexmk -pdf -pvc %
-  endif
-endfun
-command! Latexmk :call Latexmk()
-" cleanup
-command! LatexmkClean term ++close ++rows=5 latexmk -C
-
-" ==== Zotero ====
-function! ZoteroCite()
-  " pick a format based on the filetype (customize at will)
-  let format = &filetype =~ '.*tex' ? 'citep' : 'pandoc'
-  let api_call = 'http://localhost:23119/better-bibtex/cayw?format='.format.'&brackets=1'
-  let ref = system('curl -s '.shellescape(api_call))
-  return ref
-endfunction
-noremap <leader>z "=ZoteroCite()<CR>p
-inoremap <C-z> <C-r>=ZoteroCite()<CR>
-
-" Cursor
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"  " Vertical bar in insert mode
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"  " Block in normal mode
-
-" PDB
-nnoremap <leader>b obreakpoint()<Esc>
-nnoremap <leader>B Obreakpoint()<Esc>
