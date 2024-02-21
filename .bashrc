@@ -1,5 +1,9 @@
-# Bash settings
-# ---
+# ~/.bashrc is sourced in non-login shells.
+# use this for interactive uses.
+
+# if this is a non-interactive shell, don't do anything else.
+[ -z "$PS1" ] && return
+
 stty -ixon  # disable ctrl-s freezing feature
 set -o ignoreeof  # prevent accidental exits with ctrl-d
 
@@ -21,14 +25,8 @@ export HISTCONTROL=ignoredups #:erasedups  # ignore duplicate entries
 # TODO: this may be leading to overwrites.
 # shopt -s histappend  # append to history file on close
 export PROMPT_COMMAND="history -a; $BASE_PROMPT_COMMAND"  # append to the history file at each prompt
+
 alias upd_hist="history -a; history -c; history -r"  # append, and update terminal history from file
-
-PATH="/usr/local/bin:/usr/local/sbin:~/.scripts:/usr/local/opt/ruby/bin:$PATH"
-PATH="/usr/local/opt/llvm/bin:$PATH"
-export PATH="$PATH"
-
-export LDFLAGS="-L/usr/local/opt/llvm/lib"
-export CPPFLAGS="-I/usr/local/opt/llvm/include"
 
 clean-python () {
   find . \( -name "__pycache__" -o -name "*.pyc" -o -name "*.pyo" \) -exec rm -rf {} +
