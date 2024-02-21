@@ -3,7 +3,7 @@
 shopt -s dotglob extglob
 DIR="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT=`basename "$0"`
-FILES=!(.|..|.git|.gitignore|README.md|$SCRIPT|.DS_Store|.bashrc|.bash_profile|Solarized*)
+FILES=!(.|..|.git|.gitignore|.gitconfig.template|README.md|$SCRIPT|.DS_Store|.bashrc|.bash_profile|Solarized*)
 echo $FILES
 for f in $FILES; do
   pushd ~ > /dev/null  # quiet!
