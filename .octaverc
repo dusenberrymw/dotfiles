@@ -1,5 +1,0 @@
-setenv('GNUTERM', 'qt')
-graphics_toolkit('gnuplot');
-PS1('>> ');
-PS2('.. ');
-
