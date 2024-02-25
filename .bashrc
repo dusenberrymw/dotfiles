@@ -35,6 +35,3 @@ clean-python () {
 clean-ds_store () {
   find . -name ".DS_Store" -exec rm {} +
 }
-
-export HOMEBREW_NO_ANALYTICS=1
-export HOMEBREW_CASK_OPTS="--appdir=~/Applications"

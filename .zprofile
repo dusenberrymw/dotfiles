@@ -1,4 +1,4 @@
-# ~/.bash_profile is sourced in login shells.
+# ~/.zprofile is sourced in login shells.
 # use this to set the PATH and anything else that should be available globally.
 
 if [ -d "/opt/homebrew" ]; then
@@ -7,6 +7,7 @@ else
   HOMEBREW_DIR=/usr/local
 fi
 
+export PATH="/usr/local/texlive/2023basic/bin/universal-darwin:$PATH"
 export PATH="${HOMEBREW_DIR}/opt/ruby/bin:$PATH"
 export PATH="${HOMEBREW_DIR}/opt/llvm/bin:$PATH"
 export PATH="${HOMEBREW_DIR}/sbin:$PATH"
@@ -17,10 +18,3 @@ export CPPFLAGS="-I${HOMEBREW_DIR}/opt/llvm/include"
 
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
-
-# sources ~/.bashrc for interactive login shells
-if [[ $- == *i* ]]; then
-  if [ -r ~/.bashrc ]; then
-    source ~/.bashrc;
-  fi
-fi
