@@ -173,7 +173,6 @@ endif
 map <Space> <Leader>
 
 " ==== Terminal settings ====
-set shell=zsh
 if has('nvim')  " neovim settings
   autocmd TermOpen * setlocal bufhidden=hide  " prevent terminals from being deleted when switching
   autocmd TermOpen * setlocal statusline+=%f  " terminal name
