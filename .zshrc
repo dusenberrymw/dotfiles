@@ -32,5 +32,10 @@ clean-ds_store () {
   find . -name ".localized" -exec rm {} +
 }
 
+count-files () {
+  dir=${1:-.}
+  find "${dir}" -type d -mindepth 1 -maxdepth 1 -print0 | sort -z | xargs -0 -I{} sh -c "echo '{}' && find '{}' -type f -exec echo \; | wc -l"
+}
+
 # initialize auto-completion. can run `compinstall` for more options.
 autoload -U compinit && compinit
